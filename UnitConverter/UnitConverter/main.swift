@@ -7,36 +7,33 @@
 //
 import Foundation
 
-let cm = "120cm"
-var m = "1.86m"
+let input = readLine()!
 
-func separate(value: String) -> [String] {
+func convert(value: String) {
     var tmp = value
-    var ret = [String]()
-    ret.append(tmp.components(separatedBy: CharacterSet.letters).joined())
-    for _ in 1...ret[0].count {
+    let number = tmp.components(separatedBy: CharacterSet.letters).joined()
+    for _ in 1...number.count {
         tmp.removeFirst()
     }
-    ret.append(tmp)
-    return ret
-}
-
-func convert(value: [String]) -> String {
-    var number = Double(value[0])!
-    var unit = value[1]
-    let baseValue: Double = 100
-    switch unit {
+    switch tmp {
     case "cm":
-        number = number / baseValue
-        unit = "m"
+        print("\(centimeterToMeter(value: Double(number)!))m")
     case "m":
-        number = number * baseValue
-        unit = "cm"
+        print("\(meterToCentimeter(value: Double(number)!))cm")
     default:
         break
     }
-    return number.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(number)) + unit : String(number) + unit
 }
-    
-print(convert(value: separate(value: cm)))
-print(convert(value: separate(value: m)))
+
+func centimeterToMeter(value: Double) -> String {
+    let ret = value / 100
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+}
+
+func meterToCentimeter(value: Double) -> String {
+    let ret = value * 100.0
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+}
+
+convert(value: input)
+
