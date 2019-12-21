@@ -24,12 +24,13 @@ func separate(value: String) -> [String] {
 func convert(value: [String]) -> String {
     var number = Double(value[0])!
     var unit = value[1]
+    let baseValue: Double = 100
     switch unit {
     case "cm":
-        number = number / 100
+        number = number / baseValue
         unit = "m"
     case "m":
-        number = number * 100
+        number = number * baseValue
         unit = "cm"
     default:
         break
