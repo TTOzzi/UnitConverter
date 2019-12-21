@@ -34,5 +34,8 @@ func convert(value: [String]) -> String {
     default:
         break
     }
-    return String(number) + unit
+    return number.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(number)) + unit : String(number) + unit
 }
+    
+print(convert(value: separate(value: cm)))
+print(convert(value: separate(value: m)))
