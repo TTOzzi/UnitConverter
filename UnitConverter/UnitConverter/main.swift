@@ -7,19 +7,36 @@
 //
 import Foundation
 
-let input = readLine()!
+func getUserInput() -> [String] {
+    let input = readLine()!
+    return input.components(separatedBy: " ")
+}
 
-func convert(value: String) {
-    var tmp = value
+func convert(value: [String]) {
+    var tmp = value[0]
     let number = tmp.components(separatedBy: CharacterSet.letters).joined()
     for _ in 1...number.count {
         tmp.removeFirst()
     }
     switch tmp {
     case "cm":
-        print("\(centimeterToMeter(value: Double(number)!))m")
+        if value.count == 2, value[1] == "inch" {
+            print("\(centimeterToInch(value: Double(number)!))inch")
+        } else {
+            print("\(centimeterToMeter(value: Double(number)!))m")
+        }
     case "m":
-        print("\(meterToCentimeter(value: Double(number)!))cm")
+        if value.count == 2, value[1] == "inch" {
+            print("\(centimeterToInch(value: Double(meterToCentimeter(value: Double(number)!))!))inch")
+        } else {
+            print("\(meterToCentimeter(value: Double(number)!))cm")
+        }
+    case "inch":
+        if value.count == 2, value[1] == "m" {
+            print("\(centimeterToMeter(value: Double(inchToCentimeter(value: Double(number)!))!))m")
+        } else {
+            print("\(inchToCentimeter(value: Double(number)!))cm")
+        }
     default:
         break
     }
@@ -35,5 +52,15 @@ func meterToCentimeter(value: Double) -> String {
     return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
 }
 
-convert(value: input)
+func centimeterToInch(value: Double) -> String {
+    let ret = value / 2.54
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+}
 
+func inchToCentimeter(value: Double) -> String {
+    let ret = value * 2.54
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+}
+
+let input = getUserInput()
+convert(value: input)
