@@ -8,8 +8,21 @@
 import Foundation
 
 func getUserInput() -> [String] {
-    let input = readLine()!
-    return input.components(separatedBy: " ")
+    let unit: Set = ["cm", "m", "inch"]
+    
+    while true {
+        var input = readLine()!
+        let numberInput = input.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        for _ in 1...numberInput.count {
+            input.removeFirst()
+        }
+        var unitInput = input.components(separatedBy: " ")
+        if Set(unitInput).isSubset(of: unit) {
+            unitInput.insert(numberInput, at: 0)
+            return unitInput
+        }
+        print("지원하지 않는 단위입니다.")
+    }
 }
 
 func convert(value: [String]) {
@@ -33,9 +46,9 @@ func convert(value: [String]) {
         }
     case "inch":
         if value.count == 2, value[1] == "m" {
-            print("\(centimeterToMeter(value: Double(inchToCentimeter(value: Double(number)!))!))m")
+            print("\(centimeterToMeter(value: Double(inchToCentimeter(value: Double(number)!))!))")
         } else {
-            print("\(inchToCentimeter(value: Double(number)!))cm")
+            print("\(inchToCentimeter(value: Double(number)!))")
         }
     default:
         break
@@ -63,4 +76,4 @@ func inchToCentimeter(value: Double) -> String {
 }
 
 let input = getUserInput()
-convert(value: input)
+
