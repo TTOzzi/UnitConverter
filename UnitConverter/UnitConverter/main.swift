@@ -9,7 +9,6 @@ import Foundation
 
 func getUserInput() -> [String] {
     let unit: Set = ["cm", "m", "inch"]
-    
     while true {
         var input = readLine()!
         let numberInput = input.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
@@ -25,33 +24,41 @@ func getUserInput() -> [String] {
     }
 }
 
-func convert(value: [String]) {
-    var tmp = value[0]
-    let number = tmp.components(separatedBy: CharacterSet.letters).joined()
-    for _ in 1...number.count {
-        tmp.removeFirst()
-    }
-    switch tmp {
+func convert(value: [String]) -> [String] {
+    let number = Double(value[0])!
+    let unit = value[1]
+    switch unit {
     case "cm":
-        if value.count == 2, value[1] == "inch" {
-            print("\(centimeterToInch(value: Double(number)!))inch")
-        } else {
-            print("\(centimeterToMeter(value: Double(number)!))m")
-        }
+        return [centimeterToMeter(value: number), "m"]
     case "m":
-        if value.count == 2, value[1] == "inch" {
-            print("\(centimeterToInch(value: Double(meterToCentimeter(value: Double(number)!))!))inch")
+        return [meterToCentimeter(value: number), "cm"]
+    case "inch":
+        return [inchToCentimeter(value: number), "cm"]
+    default:
+        return [""]
+    }
+}
+
+func convertTo(value: [String]) -> [String] {
+    var tmp = value
+    let to = tmp.removeLast()
+    switch to {
+    case "cm":
+        return convert(value: tmp)
+    case "m":
+        if tmp[1] == "cm" {
+            return convert(value: tmp)
         } else {
-            print("\(meterToCentimeter(value: Double(number)!))cm")
+            return convert(value: convert(value: tmp))
         }
     case "inch":
-        if value.count == 2, value[1] == "m" {
-            print("\(centimeterToMeter(value: Double(inchToCentimeter(value: Double(number)!))!))")
+        if tmp[1] == "cm" {
+            return [centimeterToInch(value: Double(tmp[0])!), "inch"]
         } else {
-            print("\(inchToCentimeter(value: Double(number)!))")
+            return [centimeterToInch(value: Double(convert(value: tmp)[0])!), "inch"]
         }
     default:
-        break
+        return [""]
     }
 }
 
@@ -76,4 +83,10 @@ func inchToCentimeter(value: Double) -> String {
 }
 
 let input = getUserInput()
-
+var result = [String]()
+if input.count == 2 {
+    result = convert(value: input)
+} else {
+    result = convertTo(value: input)
+}
+print(result[0] + result[1])
