@@ -14,7 +14,7 @@ func getUserInput() -> [String] {
         if input == "quit" || input == "q" {
             return [""]
         }
-        let numberInput = input.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        let numberInput = input.filter { "0123456789.".contains($0) }
         for _ in 1...numberInput.count {
             input.removeFirst()
         }
@@ -81,32 +81,32 @@ func convertTo(value: [String]) -> String {
 
 func centimeterToMeter(value: Double) -> String {
     let ret = value / 100
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
 }
 
 func meterToCentimeter(value: Double) -> String {
     let ret = value * 100.0
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
 }
 
 func centimeterToInch(value: Double) -> String {
     let ret = value / 2.54
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
 }
 
 func inchToCentimeter(value: Double) -> String {
     let ret = value * 2.54
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
 }
 
 func centimeterToYard(value: Double) -> String {
     let ret = value / 91.44
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
 }
 
 func yardToCentimeter(value: Double) -> String {
     let ret = value * 91.44
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(ret)
+    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
 }
 
 
