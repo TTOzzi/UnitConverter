@@ -33,32 +33,6 @@ func getUserInput() -> [String] {
     }
 }
 
-func convert(value: String, unit: String) -> [String] {
-    let number = Double(convertToCentimeter(value: value, unit: unit))!
-    var ret = [String]()
-    switch unit {
-    case "cm":
-        ret.append(centimeterToMeter(value: number) + "m")
-        ret.append(centimeterToInch(value: number) + "inch")
-        ret.append(centimeterToYard(value: number) + "yard")
-    case "m":
-        ret.append(formatNumber(number) + "cm")
-        ret.append(centimeterToInch(value: number) + "inch")
-        ret.append(centimeterToYard(value: number) + "yard")
-    case "inch":
-        ret.append(formatNumber(number) + "cm")
-        ret.append(centimeterToMeter(value: number) + "m")
-        ret.append(centimeterToYard(value: number) + "yard")
-    case "yard":
-        ret.append(formatNumber(number) + "cm")
-        ret.append(centimeterToMeter(value: number) + "m")
-        ret.append(centimeterToInch(value: number) + "inch")
-    default:
-        return [""]
-    }
-    return ret
-}
-
 func convertToCentimeter(value: String, unit: String) -> String {
     let number = Double(value)!
     switch unit {
@@ -134,8 +108,8 @@ while true {
     }
     let unit = input.removeFirst()
     if input.count == 0 {
-        let result = convert(value: value, unit: unit)
-        result.forEach { print($0) }
+        let units = ["cm", "m", "inch", "yard"]
+        units.forEach { if $0 != unit { print(convertTo(value: value, unit: unit, to: $0)) } }
     } else {
         input.forEach { print(convertTo(value: value, unit: unit, to: $0)) }
     }
