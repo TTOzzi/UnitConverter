@@ -42,15 +42,15 @@ func convert(value: String, unit: String) -> [String] {
         ret.append(centimeterToInch(value: number) + "inch")
         ret.append(centimeterToYard(value: number) + "yard")
     case "m":
-        ret.append(String(number) + "cm")
+        ret.append(formatNumber(number) + "cm")
         ret.append(centimeterToInch(value: number) + "inch")
         ret.append(centimeterToYard(value: number) + "yard")
     case "inch":
-        ret.append(String(number) + "cm")
+        ret.append(formatNumber(number) + "cm")
         ret.append(centimeterToMeter(value: number) + "m")
         ret.append(centimeterToYard(value: number) + "yard")
     case "yard":
-        ret.append(String(number) + "cm")
+        ret.append(formatNumber(number) + "cm")
         ret.append(centimeterToMeter(value: number) + "m")
         ret.append(centimeterToInch(value: number) + "inch")
     default:
@@ -63,7 +63,7 @@ func convertToCentimeter(value: String, unit: String) -> String {
     let number = Double(value)!
     switch unit {
     case "cm":
-        return String(number)
+        return formatNumber(number)
     case "m":
         return meterToCentimeter(value: number)
     case "inch":
@@ -77,16 +77,16 @@ func convertToCentimeter(value: String, unit: String) -> String {
 }
 
 func convertTo(value: String, unit: String, to: String) -> String {
-    let number = convertToCentimeter(value: value, unit: unit)
+    let number = Double(convertToCentimeter(value: value, unit: unit))!
     switch to {
     case "cm":
-        return String(number) + "cm"
+        return formatNumber(number) + "cm"
     case "m":
-        return centimeterToMeter(value: Double(number)!) + "m"
+        return centimeterToMeter(value: number) + "m"
     case "inch":
-        return centimeterToInch(value: Double(number)!) + "inch"
+        return centimeterToInch(value: number) + "inch"
     case "yard":
-        return centimeterToYard(value: Double(number)!) + "yard"
+        return centimeterToYard(value: number) + "yard"
     default:
         return ""
     }
@@ -94,34 +94,37 @@ func convertTo(value: String, unit: String, to: String) -> String {
 
 func centimeterToMeter(value: Double) -> String {
     let ret = value / 100
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
+    return formatNumber(ret)
 }
 
 func meterToCentimeter(value: Double) -> String {
     let ret = value * 100.0
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
+    return formatNumber(ret)
 }
 
 func centimeterToInch(value: Double) -> String {
     let ret = value / 2.54
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
+    return formatNumber(ret)
 }
 
 func inchToCentimeter(value: Double) -> String {
     let ret = value * 2.54
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
+    return formatNumber(ret)
 }
 
 func centimeterToYard(value: Double) -> String {
     let ret = value / 91.44
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
+    return formatNumber(ret)
 }
 
 func yardToCentimeter(value: Double) -> String {
     let ret = value * 91.44
-    return ret.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(ret)) : String(format: "%.3f", ret)
+    return formatNumber(ret)
 }
 
+func formatNumber(_ number: Double) -> String {
+    return number.truncatingRemainder(dividingBy: 1) == 0 ? String(Int(number)) : String(format: "%.3f", number)
+}
 
 while true {
     var input = getUserInput()
