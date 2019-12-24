@@ -27,26 +27,34 @@ func getUserInput() -> [String] {
     }
 }
 
-func convert(value: [String]) -> String {
-    let number = Double(value[0])!
-    let unit = value[1]
+func convert(value: String, unit: String) -> [String] {
+    let number = Double(convertToCentimeter(value: value, unit: unit))!
+    var ret = [String]()
     switch unit {
     case "cm":
-        return centimeterToMeter(value: number) + "m"
+        ret.append(centimeterToMeter(value: number) + "m")
+        ret.append(centimeterToInch(value: number) + "inch")
+        ret.append(centimeterToYard(value: number) + "yard")
     case "m":
-        return meterToCentimeter(value: number) + "cm"
+        ret.append(String(number) + "cm")
+        ret.append(centimeterToInch(value: number) + "inch")
+        ret.append(centimeterToYard(value: number) + "yard")
     case "inch":
-        return inchToCentimeter(value: number) + "cm"
+        ret.append(String(number) + "cm")
+        ret.append(centimeterToMeter(value: number) + "m")
+        ret.append(centimeterToYard(value: number) + "yard")
     case "yard":
-        return centimeterToMeter(value: Double(yardToCentimeter(value: number))!) + "m"
+        ret.append(String(number) + "cm")
+        ret.append(centimeterToMeter(value: number) + "m")
+        ret.append(centimeterToInch(value: number) + "inch")
     default:
-        return ""
+        return [""]
     }
+    return ret
 }
 
-func convertToCentimeter(value: [String]) -> String {
-    let number = Double(value[0])!
-    let unit = value[1]
+func convertToCentimeter(value: String, unit: String) -> String {
+    let number = Double(value)!
     switch unit {
     case "cm":
         return String(number)
@@ -62,22 +70,22 @@ func convertToCentimeter(value: [String]) -> String {
 
 }
 
-func convertTo(value: [String]) -> String {
-    let number = convertToCentimeter(value: value)
-    let to = value[2]
-    switch to {
-    case "cm":
-        return String(number) + "cm"
-    case "m":
-        return centimeterToMeter(value: Double(number)!) + "m"
-    case "inch":
-        return centimeterToInch(value: Double(number)!) + "inch"
-    case "yard":
-        return centimeterToYard(value: Double(number)!) + "yard"
-    default:
-        return ""
-    }
-}
+//func convertTo(value: [String]) -> String {
+//    let number = convertToCentimeter(value: value)
+//    let to = value[2]
+//    switch to {
+//    case "cm":
+//        return String(number) + "cm"
+//    case "m":
+//        return centimeterToMeter(value: Double(number)!) + "m"
+//    case "inch":
+//        return centimeterToInch(value: Double(number)!) + "inch"
+//    case "yard":
+//        return centimeterToYard(value: Double(number)!) + "yard"
+//    default:
+//        return ""
+//    }
+//}
 
 func centimeterToMeter(value: Double) -> String {
     let ret = value / 100
@@ -113,9 +121,9 @@ func yardToCentimeter(value: Double) -> String {
 while true {
     let input = getUserInput()
     if input.count == 2 {
-        print(convert(value: input))
-    } else if input.count == 3 {
-        print(convertTo(value: input))
+        print(convert(value: input[0], unit: input[1]))
+//    } else if input.count == 3 {
+//        print(convertTo(value: input))
     } else {
         break
     }
