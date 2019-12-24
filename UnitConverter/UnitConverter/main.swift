@@ -9,6 +9,7 @@ import Foundation
 
 func getUserInput() -> [String] {
     let unit: Set = ["cm", "m", "inch", "yard"]
+    var ret = [String]()
     while true {
         var input = readLine()!
         if input == "quit" || input == "q" {
@@ -18,10 +19,15 @@ func getUserInput() -> [String] {
         for _ in 1...numberInput.count {
             input.removeFirst()
         }
-        var unitInput = input.components(separatedBy: " ")
-        if Set(unitInput).isSubset(of: unit) {
-            unitInput.insert(numberInput, at: 0)
-            return unitInput
+        let unitInput = input.components(separatedBy: " ")
+        if unitInput.count == 2 {
+            ret = [unitInput[0]] + unitInput[1].components(separatedBy: ",")
+        } else {
+            ret = [unitInput[0]]
+        }
+        if Set(ret).isSubset(of: unit) {
+            ret.insert(numberInput, at: 0)
+            return ret
         }
         print("지원하지 않는 단위입니다.")
     }
@@ -70,22 +76,21 @@ func convertToCentimeter(value: String, unit: String) -> String {
 
 }
 
-//func convertTo(value: [String]) -> String {
-//    let number = convertToCentimeter(value: value)
-//    let to = value[2]
-//    switch to {
-//    case "cm":
-//        return String(number) + "cm"
-//    case "m":
-//        return centimeterToMeter(value: Double(number)!) + "m"
-//    case "inch":
-//        return centimeterToInch(value: Double(number)!) + "inch"
-//    case "yard":
-//        return centimeterToYard(value: Double(number)!) + "yard"
-//    default:
-//        return ""
-//    }
-//}
+func convertTo(value: String, unit: String, to: String) -> String {
+    let number = convertToCentimeter(value: value, unit: unit)
+    switch to {
+    case "cm":
+        return String(number) + "cm"
+    case "m":
+        return centimeterToMeter(value: Double(number)!) + "m"
+    case "inch":
+        return centimeterToInch(value: Double(number)!) + "inch"
+    case "yard":
+        return centimeterToYard(value: Double(number)!) + "yard"
+    default:
+        return ""
+    }
+}
 
 func centimeterToMeter(value: Double) -> String {
     let ret = value / 100
@@ -119,13 +124,17 @@ func yardToCentimeter(value: Double) -> String {
 
 
 while true {
-    let input = getUserInput()
-    if input.count == 2 {
-        print(convert(value: input[0], unit: input[1]))
-//    } else if input.count == 3 {
-//        print(convertTo(value: input))
-    } else {
+    var input = getUserInput()
+    let value = input.removeFirst()
+    if value == "" {
         break
+    }
+    let unit = input.removeFirst()
+    if input.count == 0 {
+        let result = convert(value: value, unit: unit)
+        result.forEach { print($0) }
+    } else {
+        input.forEach { print(convertTo(value: value, unit: unit, to: $0)) }
     }
 }
 
